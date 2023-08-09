@@ -12,11 +12,13 @@ export class AdminRepository extends Repository<Admin> {
 		super(repository.target, repository.manager, repository.queryRunner)
 	}
 
-	async findByQuery(): Promise<any> {
+	async findByQuery(query?: any, limit?: number, offset?: number): Promise<[Admin[], number]> {
 		try {
-			console.log('=> AdminRepository > findByQuery')
-			const result = await this.find()
-			console.log('=> AdminRepository > findByQuery > result:', result)
+			const result = await this.findAndCount({
+				where: query,
+				take: limit,
+				skip: offset
+			})
 			return result
 		} catch (error) {
 			return Promise.reject(new Error('Cannot query'))

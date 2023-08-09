@@ -1,7 +1,10 @@
-import { Injectable } from '@nestjs/common'
+import { HttpStatus, Injectable } from '@nestjs/common'
 import { CreateAdminDto } from './dto/create-admin.dto'
 import { UpdateAdminDto } from './dto/update-admin.dto'
 import { AdminRepository } from './repositories/admin.repository'
+import { FindAllAdmin } from './interfaces/admin.interface'
+import { APIResponse, apiResWrapper } from 'src/helpers/api-response'
+import { makePag, popPag } from 'src/helpers/pagination'
 
 @Injectable()
 export class AdminService {
@@ -11,22 +14,21 @@ export class AdminService {
 		return 'This action adds a new admin'
 	}
 
-	async findAll(): Promise<any> {
+	async findAll(query: FindAllAdmin): Promise<APIResponse> {
 		try {
-			console.log('==> AdminService -> findAll')
-			const admins = await this.adminRepository.findByQuery()
-			return {
-				status: 'OK',
-				code: 200,
-				data: admins
-			}
+			const { offset, page, limit } = makePag(query.page, query.limit)
+			const findQuery = { id: query.id, email: query.email }
+
+			const [admins, count] = await this.adminRepository.findByQuery(findQuery, limit, offset)
+			const pagination = popPag(page, limit, '', offset, count)
+
+			return apiResWrapper(HttpStatus.OK, 'Successfully find all admin', admins, pagination)
 		} catch (error) {
-			Promise.reject(new Error('Cannot resolve request'))
+			Promise.reject(new Error('Cannot find all admin'))
 		}
 	}
 
 	findOne(id: number) {
-		console.log('number:', id)
 		return `This action returns a #${id} admin`
 	}
 

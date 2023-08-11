@@ -1,8 +1,8 @@
-export interface FindAllAdmin {
+export interface FindAllCategory {
 	id?: string
-	email?: string
+	name?: string
 	page?: number
 	limit?: number
-	order?: string
 	sort?: 'ASC' | 'DESC'
+	order?: string
 }

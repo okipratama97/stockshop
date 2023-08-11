@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config'
 import { AdminModule } from './admin/admin.module'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Admin } from './admin/entities/admin.entity'
+import { CategoryModule } from './category/category.module';
 
 @Module({
 	imports: [
@@ -24,7 +25,8 @@ import { Admin } from './admin/entities/admin.entity'
 			synchronize: true,
 			autoLoadEntities: true
 		}),
-		AdminModule
+		AdminModule,
+		CategoryModule
 	],
 	controllers: [AppController],
 	providers: [AppService]

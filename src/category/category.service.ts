@@ -6,6 +6,7 @@ import { FindAllCategory } from './interfaces/category.interface'
 import { makePag, popPag } from 'src/helpers/pagination'
 import { CategoryRepository } from './repositories/category.repository'
 import { makeSort } from 'src/helpers/sort'
+import { makeSearch } from 'src/helpers/search'
 
 @Injectable()
 export class CategoryService {
@@ -25,9 +26,7 @@ export class CategoryService {
 		try {
 			const { offset, page, limit } = makePag(query.page, query.limit)
 			const order = makeSort(query.order, query.sort)
-			const findQuery = { id: query.id, name: query.name }
-
-			console.log('=> findAll > order', order)
+			const findQuery = query.search ? makeSearch(['name'], query.search) : { id: query.id, name: query.name }
 
 			const [categories, count] = await this.categoryRepository.findByQuery(findQuery, limit, offset, order)
 			const pagination = popPag(page, limit, '', offset, count, query.order, query.sort)

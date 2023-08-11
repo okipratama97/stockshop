@@ -5,4 +5,5 @@ export interface FindAllCategory {
 	limit?: number
 	sort?: 'ASC' | 'DESC'
 	order?: string
+	search?: string
 }

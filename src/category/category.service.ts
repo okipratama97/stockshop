@@ -7,6 +7,7 @@ import { makePag, popPag } from 'src/helpers/pagination'
 import { CategoryRepository } from './repositories/category.repository'
 import { makeSort } from 'src/helpers/sort'
 import { makeSearch } from 'src/helpers/search'
+import { makeResError } from 'src/helpers/error'
 
 @Injectable()
 export class CategoryService {
@@ -18,7 +19,7 @@ export class CategoryService {
 
 			return apiResWrapper(HttpStatus.OK, 'Successfully created new category')
 		} catch (error) {
-			Promise.reject(new Error('Cannot create new category'))
+			return Promise.reject(makeResError(error, HttpStatus.BAD_REQUEST, 'Cannot create new category'))
 		}
 	}
 
@@ -33,7 +34,7 @@ export class CategoryService {
 
 			return apiResWrapper(HttpStatus.OK, 'Successfully find all categories', categories, pagination)
 		} catch (error) {
-			Promise.reject(new Error('Cannot find all categories'))
+			return Promise.reject(makeResError(error, HttpStatus.BAD_REQUEST, 'Cannot find all categories'))
 		}
 	}
 

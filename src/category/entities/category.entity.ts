@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { Item } from 'src/item/entities/item.entity'
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
 @Entity({ name: 'categories' })
 export class Category {
@@ -19,4 +20,9 @@ export class Category {
 
 	@UpdateDateColumn({ type: 'timestamp' })
 	updated_at: Date
+
+	//Relation Columns
+
+	@OneToMany(() => Item, item => item.category)
+	items: Item[]
 }

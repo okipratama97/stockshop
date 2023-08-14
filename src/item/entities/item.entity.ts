@@ -27,6 +27,9 @@ export class Item {
 	@Column({ type: 'boolean', default: false })
 	is_featured: boolean
 
+	@Column({ type: 'jsonb', nullable: true })
+	options: string
+
 	@CreateDateColumn({ type: 'timestamp' })
 	created_at: Date
 

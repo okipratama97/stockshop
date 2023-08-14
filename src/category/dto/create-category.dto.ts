@@ -12,4 +12,6 @@ export class CreateCategoryDto {
 	@IsNotEmpty()
 	@IsString()
 	image: string
+
+	options?: any
 }

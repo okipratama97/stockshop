@@ -1,4 +1,4 @@
-import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator'
+import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsString, Min } from 'class-validator'
 
 export enum ItemStatus {
 	AVAILABLE = 'AVAILABLE',
@@ -19,10 +19,12 @@ export class CreateItemDto {
 
 	@IsNotEmpty()
 	@IsNumber()
+	@Min(0)
 	price: number
 
 	@IsNotEmpty()
 	@IsNumber()
+	@Min(0)
 	stock: number
 
 	@IsNotEmpty()
@@ -36,4 +38,6 @@ export class CreateItemDto {
 	@IsNotEmpty()
 	@IsString()
 	category_id: string
+
+	options?: any
 }

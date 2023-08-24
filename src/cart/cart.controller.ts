@@ -5,7 +5,7 @@ import { UpdateCartDto } from './dto/update-cart.dto'
 import { Response } from 'express'
 import { APIResponse } from 'src/helpers/api-response'
 import { RemoveItemFromCartDto } from './dto/remove-item-from-cart.dto'
-import { AddItemToCartDto } from './dto/add-item-to-cart.dto copy'
+import { AddItemToCartDto } from './dto/add-item-to-cart.dto'
 
 @Controller('carts')
 export class CartController {

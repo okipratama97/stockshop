@@ -1,5 +1,5 @@
 import { CartItem } from './entities/cart-item.entity'
 
-export const reduceItemAmount = (cartItem: CartItem, amount: number): void => {
-	cartItem.amount = cartItem.amount - amount
+export const reduceItemQuantity = (cartItem: CartItem, quantity: number): void => {
+	cartItem.quantity = cartItem.quantity - quantity
 }

@@ -8,5 +8,5 @@ export class AddItemToCartDto {
 	@IsNotEmpty()
 	@IsNumber()
 	@Min(1)
-	amount: number
+	quantity: number
 }

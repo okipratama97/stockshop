@@ -8,7 +8,7 @@ export class CartItem {
 	id: string
 
 	@Column({ type: 'int', default: 1 })
-	amount: number
+	quantity: number
 
 	@CreateDateColumn({ type: 'timestamp' })
 	created_at: Date

@@ -7,9 +7,9 @@ import { makeResError } from 'src/helpers/error'
 import { ItemRepository } from 'src/item/repositories/item.repository'
 import { Cart } from './entities/cart.entity'
 import { CartItemRepository } from './repositories/cart-item.repository'
-import { AddItemToCartDto } from './dto/add-item-to-cart.dto copy'
+import { AddItemToCartDto } from './dto/add-item-to-cart.dto'
 import { RemoveItemFromCartDto } from './dto/remove-item-from-cart.dto'
-import { reduceItemAmount } from './cart.helper'
+import { reduceItemQuantity } from './cart.helper'
 
 @Injectable()
 export class CartService {
@@ -24,7 +24,7 @@ export class CartService {
 			// validate item
 			const item = await this.itemRepository.findOne({ where: { id: itemDto.item_id } })
 			if (!item) throw apiResWrapper(HttpStatus.BAD_REQUEST, 'Cannot find item')
-			if (item.stock < itemDto.amount || item.status !== 'AVAILABLE') throw apiResWrapper(HttpStatus.BAD_REQUEST, 'Item not available')
+			if (item.stock < itemDto.quantity || item.status !== 'AVAILABLE') throw apiResWrapper(HttpStatus.BAD_REQUEST, 'Item not available')
 
 			// create cart if not available
 			let cart: Cart
@@ -41,7 +41,7 @@ export class CartService {
 			const isAlreadyInCart = cart.cart_items?.find(item => item.item_id)
 			if (!isAlreadyInCart) {
 				// insert item to cart
-				await this.cartItemRepository.insert({ amount: itemDto.amount, cart_id: cart.id, item_id: item.id })
+				await this.cartItemRepository.insert({ quantity: itemDto.quantity, cart_id: cart.id, item_id: item.id })
 			}
 
 			// get the cart with items to return
@@ -66,11 +66,11 @@ export class CartService {
 			// validate item in cart
 			const cartItem = cart.cart_items.find(item => item.item_id)
 			if (!cartItem) throw apiResWrapper(HttpStatus.BAD_REQUEST, 'Item is not in cart')
-			if (itemDto.amount > cartItem.amount) throw apiResWrapper(HttpStatus.BAD_REQUEST, 'Unable to remove item because of amount')
+			if (itemDto.quantity > cartItem.quantity) throw apiResWrapper(HttpStatus.BAD_REQUEST, 'Unable to remove item because of quantity')
 
 			// remove item from cart
-			reduceItemAmount(cartItem, itemDto.amount)
-			if (cartItem.amount === 0) await this.cartItemRepository.remove(cartItem)
+			reduceItemQuantity(cartItem, itemDto.quantity)
+			if (cartItem.quantity === 0) await this.cartItemRepository.remove(cartItem)
 			else await this.cartItemRepository.save(cartItem)
 
 			// get the cart with items to return

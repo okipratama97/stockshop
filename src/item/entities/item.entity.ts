@@ -1,5 +1,6 @@
+import { CartItem } from 'src/cart/entities/cart-item.entity'
 import { Category } from 'src/category/entities/category.entity'
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 
 @Entity({ name: 'items' })
 export class Item {
@@ -41,7 +42,10 @@ export class Item {
 	@Column({ type: 'varchar' })
 	category_id: string
 
-	@ManyToOne(() => Category, cateogry => cateogry.items)
+	@ManyToOne(() => Category, category => category.items)
 	@JoinColumn({ name: 'category_id' })
 	category: Category
+
+	@OneToMany(() => CartItem, cartItem => cartItem.item)
+	cart_items: CartItem[]
 }

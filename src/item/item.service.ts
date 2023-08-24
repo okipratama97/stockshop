@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
+import { HttpStatus, Injectable } from '@nestjs/common'
 import { CreateItemDto } from './dto/create-item.dto'
 import { UpdateItemDto } from './dto/update-item.dto'
 import { makePag, popPag } from 'src/helpers/pagination'
@@ -43,7 +43,6 @@ export class ItemService {
 	}
 
 	async findOne(id: string): Promise<APIResponse> {
-		// return `This action returns a #${id} item`
 		try {
 			const item = await this.itemRepository.findOne({ where: { id } })
 			if (!item) throw apiResWrapper(HttpStatus.NOT_FOUND, 'Cannot find item')

@@ -8,6 +8,8 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { Admin } from './admin/entities/admin.entity'
 import { CategoryModule } from './category/category.module';
 import { ItemModule } from './item/item.module';
+import { CartModule } from './cart/cart.module';
+import { CustomerModule } from './customer/customer.module';
 
 @Module({
 	imports: [
@@ -28,7 +30,9 @@ import { ItemModule } from './item/item.module';
 		}),
 		AdminModule,
 		CategoryModule,
-		ItemModule
+		ItemModule,
+		CartModule,
+		CustomerModule
 	],
 	controllers: [AppController],
 	providers: [AppService]

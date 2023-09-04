@@ -9,7 +9,7 @@ COPY ./package.json ./
 COPY ./yarn.lock ./
 
 # Run yarn install
-RUN yarn install && yarn cache clean
+# RUN yarn install && yarn cache clean
 
 # Copy the rest of the files in this folder into the image
 COPY ./ ./
@@ -18,5 +18,5 @@ COPY ./ ./
 EXPOSE 3000
 
 # The execute command
-CMD [ "yarn", "start" ]
-# CMD \[ -d "node_modules" \] && yarn start || yarn install && yarn start
+# CMD [ "yarn", "start" ]
+CMD \[ -d "node_modules" \] && yarn start || yarn install && yarn start

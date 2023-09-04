@@ -38,12 +38,13 @@ export class CartService {
 			}
 
 			// check if item already inside cart
-			const isAlreadyInCart = cart.cart_items?.find(item => item.item_id)
-			if (!isAlreadyInCart) {
-				// insert item to cart
-				await this.cartItemRepository.insert({ quantity: itemDto.quantity, cart_id: cart.id, item_id: item.id })
+			const isAlreadyInCart = cart.cart_items?.find(ci => ci.item_id == item.id)
+			if (isAlreadyInCart) {
+				throw apiResWrapper(HttpStatus.BAD_REQUEST, 'Item already in cart')
 			}
 
+			// insert item to cart
+			await this.cartItemRepository.insert({ quantity: itemDto.quantity, cart_id: cart.id, item_id: item.id })
 			// get the cart with items to return
 			const cartResult = await this.cartRepository.findOne({ where: { id: cart.id }, relations: { cart_items: { item: true } } })
 

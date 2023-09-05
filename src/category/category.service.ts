@@ -27,7 +27,8 @@ export class CategoryService {
 		try {
 			const { offset, page, limit } = makePag(query.page, query.limit)
 			const order = makeSort(query.order, query.sort)
-			const findQuery = query.search ? makeSearch(['name'], query.search) : { id: query.id, name: query.name }
+			const baseQuery = { id: query.id, name: query.name }
+			const findQuery = query.search ? makeSearch(['name'], query.search, baseQuery) : baseQuery
 
 			const [categories, count] = await this.categoryRepository.findByQuery(findQuery, limit, offset, order)
 			const pagination = popPag(page, limit, '', offset, count, query.order, query.sort)

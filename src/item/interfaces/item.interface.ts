@@ -6,4 +6,5 @@ export interface FindAllItem {
 	sort?: 'ASC' | 'DESC'
 	order?: string
 	search?: string
+	category_id?: string
 }

@@ -98,6 +98,17 @@ export class CartService {
 		}
 	}
 
+	async myCart(customer: any): Promise<APIResponse> {
+		try {
+			const cart = await this.cartRepository.findOne({ where: { customer_id: customer.id }, relations: { cart_items: { item: true } } })
+			if (!cart) throw apiResWrapper(HttpStatus.NOT_FOUND, 'Cannot find cart')
+
+			return apiResWrapper(HttpStatus.OK, 'Successfully find cart', cart)
+		} catch (error) {
+			return Promise.reject(makeResError(error, HttpStatus.NOT_FOUND, 'Cannot find cart'))
+		}
+	}
+
 	update(id: number, updateCartDto: UpdateCartDto) {
 		return `This action updates a #${id} cart`
 	}

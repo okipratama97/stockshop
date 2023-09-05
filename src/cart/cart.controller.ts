@@ -43,6 +43,17 @@ export class CartController {
 		return this.cartService.findAll()
 	}
 
+	@Get('/my-cart')
+	async myCart(@Res() res: Response) {
+		try {
+			const customer = { id: '8539d7ce-9e46-49f3-ad33-e2800e830b33' }
+			const serviceResponse: APIResponse = await this.cartService.myCart(customer)
+			return res.status(serviceResponse.status_code).send(serviceResponse)
+		} catch (e: any) {
+			return res.status(e?.status_code).send(e)
+		}
+	}
+
 	@Get(':id')
 	async findOne(@Res() res: Response, @Param('id') id: string) {
 		try {

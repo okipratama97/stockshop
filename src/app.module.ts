@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common'
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common'
 import { AppController } from './app.controller'
 import { AppService } from './app.service'
 import config from './config/config'
@@ -13,6 +13,10 @@ import { CustomerModule } from './customer/customer.module'
 import { APP_FILTER } from '@nestjs/core'
 import { HttpExceptionFilter } from './filters/http-exception.filter'
 import { AllExceptionsFilter } from './filters/exception.filter'
+import { LoggerMiddleware } from './logger/logger.middleware'
+import { InterceptorMiddleware } from './logger/interceptor.middlewar'
+import { CustomerController } from './customer/customer.controller'
+import { report } from './logger/report.middleware'
 
 @Module({
 	imports: [
@@ -50,4 +54,9 @@ import { AllExceptionsFilter } from './filters/exception.filter'
 		AppService
 	]
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+	configure(consumer: MiddlewareConsumer) {
+		consumer.apply(LoggerMiddleware, report).forRoutes('*')
+		consumer.apply(InterceptorMiddleware).forRoutes(CustomerController)
+	}
+}

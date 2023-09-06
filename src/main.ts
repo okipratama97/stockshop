@@ -2,6 +2,7 @@ import 'dotenv/config'
 import { NestFactory } from '@nestjs/core'
 import { AppModule } from './app.module'
 import { ValidationPipe } from '@nestjs/common'
+import { report } from './logger/report.middleware'
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule)
@@ -11,6 +12,8 @@ async function bootstrap() {
 			whitelist: true
 		})
 	)
+	// possible approach for global middleware. but only takes function middleware
+	app.use(report)
 	await app.listen(process.env.PORT || 3000)
 }
 bootstrap()

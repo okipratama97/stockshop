@@ -1,3 +1,4 @@
+import { HttpException, HttpStatus } from '@nestjs/common'
 import { APIResponse } from './api-response'
 
 export const makeResError = (error: any, statusCode?: number, message?: string): APIResponse => {
@@ -8,4 +9,10 @@ export const makeResError = (error: any, statusCode?: number, message?: string):
 		message: error.message ? error.message : message
 	}
 	return res
+}
+
+export const popHttpException = (error: any): any => {
+	const status = error?.status_code || HttpStatus.INTERNAL_SERVER_ERROR
+	const message = error?.message || 'Internal Server Error'
+	return new HttpException({ status, message }, status, { cause: error })
 }

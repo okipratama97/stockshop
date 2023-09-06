@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable } from '@nestjs/common'
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common'
 import { CreateAdminDto } from './dto/create-admin.dto'
 import { UpdateAdminDto } from './dto/update-admin.dto'
 import { AdminRepository } from './repositories/admin.repository'
@@ -6,6 +6,7 @@ import { FindAllAdmin } from './interfaces/admin.interface'
 import { APIResponse, apiResWrapper } from 'src/helpers/api-response'
 import { makePag, popPag } from 'src/helpers/pagination'
 import { makeSort } from 'src/helpers/sort'
+import { makeResError } from 'src/helpers/error'
 
 @Injectable()
 export class AdminService {
@@ -26,7 +27,7 @@ export class AdminService {
 
 			return apiResWrapper(HttpStatus.OK, 'Successfully find all admins', admins, pagination)
 		} catch (error) {
-			Promise.reject(new Error('Cannot find all admins'))
+			return Promise.reject(makeResError(error, HttpStatus.BAD_REQUEST, 'Cannot find all admins'))
 		}
 	}
 

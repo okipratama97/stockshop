@@ -6,10 +6,13 @@ import { ConfigModule } from '@nestjs/config'
 import { AdminModule } from './admin/admin.module'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Admin } from './admin/entities/admin.entity'
-import { CategoryModule } from './category/category.module';
-import { ItemModule } from './item/item.module';
-import { CartModule } from './cart/cart.module';
-import { CustomerModule } from './customer/customer.module';
+import { CategoryModule } from './category/category.module'
+import { ItemModule } from './item/item.module'
+import { CartModule } from './cart/cart.module'
+import { CustomerModule } from './customer/customer.module'
+import { APP_FILTER } from '@nestjs/core'
+import { HttpExceptionFilter } from './filters/http-exception.filter'
+import { AllExceptionsFilter } from './filters/exception.filter'
 
 @Module({
 	imports: [
@@ -35,6 +38,16 @@ import { CustomerModule } from './customer/customer.module';
 		CustomerModule
 	],
 	controllers: [AppController],
-	providers: [AppService]
+	providers: [
+		{
+			provide: APP_FILTER,
+			useClass: AllExceptionsFilter
+		},
+		{
+			provide: APP_FILTER,
+			useClass: HttpExceptionFilter
+		},
+		AppService
+	]
 })
 export class AppModule {}

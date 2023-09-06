@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Query } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Query, HttpException, HttpStatus, UseFilters } from '@nestjs/common'
 import { AdminService } from './admin.service'
 import { CreateAdminDto } from './dto/create-admin.dto'
 import { UpdateAdminDto } from './dto/update-admin.dto'
@@ -6,8 +6,10 @@ import { Response } from 'express'
 import { OutgoingMessage } from 'http'
 import { APIResponse } from 'src/helpers/api-response'
 import { FindAllAdmin } from './interfaces/admin.interface'
+import { popHttpException } from 'src/helpers/error'
 
 @Controller('admins')
+// @UseFilters(new HttpExceptionFilter()) can be scoped here
 export class AdminController {
 	constructor(private readonly adminService: AdminService) {}
 
@@ -17,12 +19,13 @@ export class AdminController {
 	}
 
 	@Get()
+	// @UseFilters(new HttpExceptionFilter()) can be scoped here
 	async findAll(@Res() res: Response, @Query() query: FindAllAdmin): Promise<OutgoingMessage> {
 		try {
 			const serviceResponse: APIResponse = await this.adminService.findAll(query)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {
-			return res.status(e?.status_code).send(e)
+			throw popHttpException(e)
 		}
 	}
 

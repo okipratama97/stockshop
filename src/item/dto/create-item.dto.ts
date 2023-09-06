@@ -1,9 +1,5 @@
 import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsString, Min } from 'class-validator'
-
-export enum ItemStatus {
-	AVAILABLE = 'AVAILABLE',
-	UNAVAILABLE = 'UNAVAILABLE'
-}
+import { ItemStatus } from '../enums/item.enum'
 
 export class CreateItemDto {
 	@IsNotEmpty()

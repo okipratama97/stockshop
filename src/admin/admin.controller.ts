@@ -6,7 +6,7 @@ import { Response } from 'express'
 import { OutgoingMessage } from 'http'
 import { APIResponse } from 'src/helpers/api-response'
 import { FindAllAdmin } from './interfaces/admin.interface'
-import { popHttpException } from 'src/helpers/error'
+import { genHttpException } from 'src/helpers/error'
 
 @Controller('admins')
 // @UseFilters(new HttpExceptionFilter()) can be scoped here
@@ -25,7 +25,7 @@ export class AdminController {
 			const serviceResponse: APIResponse = await this.adminService.findAll(query)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {
-			throw popHttpException(e)
+			throw genHttpException(e)
 		}
 	}
 

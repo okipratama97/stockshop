@@ -11,7 +11,7 @@ export const makeResError = (error: any, statusCode?: number, message?: string):
 	return res
 }
 
-export const popHttpException = (error: any): any => {
+export const genHttpException = (error: any): any => {
 	const status = error?.status_code || HttpStatus.INTERNAL_SERVER_ERROR
 	const message = error?.message || 'Internal Server Error'
 	return new HttpException({ status, message }, status, { cause: error })

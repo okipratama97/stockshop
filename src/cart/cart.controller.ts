@@ -6,6 +6,7 @@ import { Response } from 'express'
 import { APIResponse } from 'src/helpers/api-response'
 import { RemoveItemFromCartDto } from './dto/remove-item-from-cart.dto'
 import { AddItemToCartDto } from './dto/add-item-to-cart.dto'
+import { genHttpException } from 'src/helpers/error'
 
 @Controller('carts')
 export class CartController {
@@ -23,7 +24,7 @@ export class CartController {
 			const serviceResponse: APIResponse = await this.cartService.addItem(addItemDto, customer)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {
-			return res.status(e?.status_code).send(e)
+			throw genHttpException(e)
 		}
 	}
 
@@ -34,7 +35,7 @@ export class CartController {
 			const serviceResponse: APIResponse = await this.cartService.removeItem(removeItemDto, customer)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {
-			return res.status(e?.status_code).send(e)
+			throw genHttpException(e)
 		}
 	}
 
@@ -50,7 +51,7 @@ export class CartController {
 			const serviceResponse: APIResponse = await this.cartService.myCart(customer)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {
-			return res.status(e?.status_code).send(e)
+			throw genHttpException(e)
 		}
 	}
 
@@ -60,7 +61,7 @@ export class CartController {
 			const serviceResponse: APIResponse = await this.cartService.findOne(id)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {
-			return res.status(e?.status_code).send(e)
+			throw genHttpException(e)
 		}
 	}
 
@@ -76,7 +77,7 @@ export class CartController {
 			const serviceResponse: APIResponse = await this.cartService.deleteCart(id, customer.id)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {
-			return res.status(e?.status_code).send(e)
+			throw genHttpException(e)
 		}
 	}
 }

@@ -5,6 +5,7 @@ import { UpdateItemDto } from './dto/update-item.dto'
 import { APIResponse } from 'src/helpers/api-response'
 import { FindAllItem } from './interfaces/item.interface'
 import { Response } from 'express'
+import { genHttpException } from 'src/helpers/error'
 
 @Controller('items')
 export class ItemController {
@@ -16,7 +17,7 @@ export class ItemController {
 			const serviceResponse: APIResponse = await this.itemService.create(createItemDto)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {
-			return res.status(e?.status_code).send(e)
+			throw genHttpException(e)
 		}
 	}
 
@@ -26,7 +27,7 @@ export class ItemController {
 			const serviceResponse: APIResponse = await this.itemService.findAll(query)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {
-			return res.status(e?.status_code).send(e)
+			throw genHttpException(e)
 		}
 	}
 
@@ -36,7 +37,7 @@ export class ItemController {
 			const serviceResponse: APIResponse = await this.itemService.findOne(id)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {
-			return res.status(e?.status_code).send(e)
+			throw genHttpException(e)
 		}
 	}
 

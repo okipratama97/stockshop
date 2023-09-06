@@ -5,6 +5,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto'
 import { FindAllCategory } from './interfaces/category.interface'
 import { Response } from 'express'
 import { APIResponse } from 'src/helpers/api-response'
+import { genHttpException } from 'src/helpers/error'
 
 @Controller('categories')
 export class CategoryController {
@@ -16,7 +17,7 @@ export class CategoryController {
 			const serviceResponse: APIResponse = await this.categoryService.create(createCategoryDto)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {
-			return res.status(e?.status_code).send(e)
+			throw genHttpException(e)
 		}
 	}
 
@@ -26,7 +27,7 @@ export class CategoryController {
 			const serviceResponse: APIResponse = await this.categoryService.findAll(query)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {
-			return res.status(e?.status_code).send(e)
+			throw genHttpException(e)
 		}
 	}
 

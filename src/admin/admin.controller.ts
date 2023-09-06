@@ -1,4 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, Query, HttpException, HttpStatus, UseFilters } from '@nestjs/common'
+import {
+	Controller,
+	Get,
+	Post,
+	Body,
+	Patch,
+	Param,
+	Delete,
+	Res,
+	Query,
+	HttpException,
+	HttpStatus,
+	UseFilters,
+	ParseUUIDPipe,
+	UseGuards,
+	SetMetadata
+} from '@nestjs/common'
 import { AdminService } from './admin.service'
 import { CreateAdminDto } from './dto/create-admin.dto'
 import { UpdateAdminDto } from './dto/update-admin.dto'
@@ -7,6 +23,9 @@ import { OutgoingMessage } from 'http'
 import { APIResponse } from 'src/helpers/api-response'
 import { FindAllAdmin } from './interfaces/admin.interface'
 import { genHttpException } from 'src/helpers/error'
+import { AuthGuard } from 'src/guards/auth.guard'
+import { RolesGuard } from 'src/guards/roles.guard'
+import { Roles } from 'src/guards/decorators/roles.decorator'
 
 @Controller('admins')
 // @UseFilters(new HttpExceptionFilter()) can be scoped here
@@ -19,6 +38,8 @@ export class AdminController {
 	}
 
 	@Get()
+	@Roles('admin')
+	@UseGuards(AuthGuard, RolesGuard)
 	// @UseFilters(new HttpExceptionFilter()) can be scoped here
 	async findAll(@Res() res: Response, @Query() query: FindAllAdmin): Promise<OutgoingMessage> {
 		try {
@@ -30,17 +51,17 @@ export class AdminController {
 	}
 
 	@Get(':id')
-	findOne(@Param('id') id: string) {
+	findOne(@Param('id', ParseUUIDPipe) id: string) {
 		return this.adminService.findOne(+id)
 	}
 
 	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateAdminDto: UpdateAdminDto) {
+	update(@Param('id', ParseUUIDPipe) id: string, @Body() updateAdminDto: UpdateAdminDto) {
 		return this.adminService.update(+id, updateAdminDto)
 	}
 
 	@Delete(':id')
-	remove(@Param('id') id: string) {
+	remove(@Param('id', ParseUUIDPipe) id: string) {
 		return this.adminService.remove(+id)
 	}
 }

@@ -13,10 +13,10 @@ import { CustomerModule } from './customer/customer.module'
 import { APP_FILTER } from '@nestjs/core'
 import { HttpExceptionFilter } from './filters/http-exception.filter'
 import { AllExceptionsFilter } from './filters/exception.filter'
-import { LoggerMiddleware } from './logger/logger.middleware'
-import { InterceptorMiddleware } from './logger/interceptor.middlewar'
+import { LoggerMiddleware } from './middlewares/logger.middleware'
+import { InterceptorMiddleware } from './middlewares/interceptor.middlewar'
 import { CustomerController } from './customer/customer.controller'
-import { report } from './logger/report.middleware'
+import { report } from './middlewares/report.middleware'
 
 @Module({
 	imports: [
@@ -57,6 +57,6 @@ import { report } from './logger/report.middleware'
 export class AppModule implements NestModule {
 	configure(consumer: MiddlewareConsumer) {
 		consumer.apply(LoggerMiddleware, report).forRoutes('*')
-		consumer.apply(InterceptorMiddleware).forRoutes(CustomerController)
+		// consumer.apply(InterceptorMiddleware).forRoutes(CustomerController)
 	}
 }

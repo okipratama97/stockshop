@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, ParseUUIDPipe } from '@nestjs/common'
 import { CartService } from './cart.service'
 import { CreateCartDto } from './dto/create-cart.dto'
 import { UpdateCartDto } from './dto/update-cart.dto'
@@ -56,7 +56,7 @@ export class CartController {
 	}
 
 	@Get(':id')
-	async findOne(@Res() res: Response, @Param('id') id: string) {
+	async findOne(@Res() res: Response, @Param('id', ParseUUIDPipe) id: string) {
 		try {
 			const serviceResponse: APIResponse = await this.cartService.findOne(id)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
@@ -66,12 +66,12 @@ export class CartController {
 	}
 
 	@Patch(':id')
-	update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
+	update(@Param('id', ParseUUIDPipe) id: string, @Body() updateCartDto: UpdateCartDto) {
 		return this.cartService.update(+id, updateCartDto)
 	}
 
 	@Delete(':id')
-	async deleteCart(@Res() res: Response, @Param('id') id: string) {
+	async deleteCart(@Res() res: Response, @Param('id', ParseUUIDPipe) id: string) {
 		try {
 			const customer = { id: '8539d7ce-9e46-49f3-ad33-e2800e830b33' }
 			const serviceResponse: APIResponse = await this.cartService.deleteCart(id, customer.id)

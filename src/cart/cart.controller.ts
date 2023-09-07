@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, ParseUUIDPipe } from '@nestjs/common'
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, ParseUUIDPipe, UseGuards } from '@nestjs/common'
 import { CartService } from './cart.service'
 import { CreateCartDto } from './dto/create-cart.dto'
 import { UpdateCartDto } from './dto/update-cart.dto'
@@ -7,6 +7,9 @@ import { APIResponse } from 'src/helpers/api-response'
 import { RemoveItemFromCartDto } from './dto/remove-item-from-cart.dto'
 import { AddItemToCartDto } from './dto/add-item-to-cart.dto'
 import { genHttpException } from 'src/helpers/error'
+import { User } from 'src/decorators/user.decorator'
+import { Customer } from 'src/customer/entities/customer.entity'
+import { AuthGuard } from 'src/guards/auth.guard'
 
 @Controller('carts')
 export class CartController {
@@ -45,9 +48,9 @@ export class CartController {
 	}
 
 	@Get('/my-cart')
-	async myCart(@Res() res: Response) {
+	@UseGuards(AuthGuard)
+	async myCart(@User() customer: Partial<Customer>, @Res() res: Response) {
 		try {
-			const customer = { id: '8539d7ce-9e46-49f3-ad33-e2800e830b33' }
 			const serviceResponse: APIResponse = await this.cartService.myCart(customer)
 			return res.status(serviceResponse.status_code).send(serviceResponse)
 		} catch (e: any) {

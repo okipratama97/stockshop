@@ -10,13 +10,15 @@ import { CategoryModule } from './category/category.module'
 import { ItemModule } from './item/item.module'
 import { CartModule } from './cart/cart.module'
 import { CustomerModule } from './customer/customer.module'
-import { APP_FILTER } from '@nestjs/core'
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core'
 import { HttpExceptionFilter } from './filters/http-exception.filter'
 import { AllExceptionsFilter } from './filters/exception.filter'
 import { LoggerMiddleware } from './middlewares/logger.middleware'
 import { InterceptorMiddleware } from './middlewares/interceptor.middlewar'
 import { CustomerController } from './customer/customer.controller'
 import { report } from './middlewares/report.middleware'
+import { CacheInterceptor } from './interceptors/cache.interceptor'
+import { TimeoutInterceptor } from './interceptors/timeout.interceptor'
 
 @Module({
 	imports: [
@@ -50,6 +52,10 @@ import { report } from './middlewares/report.middleware'
 		{
 			provide: APP_FILTER,
 			useClass: HttpExceptionFilter
+		},
+		{
+			provide: APP_INTERCEPTOR,
+			useClass: TimeoutInterceptor
 		},
 		AppService
 	]

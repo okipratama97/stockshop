@@ -5,7 +5,7 @@ import { HttpAdapterHost } from '@nestjs/core'
 export class AllExceptionsFilter implements ExceptionFilter {
 	constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
-	catch(exception: unknown, host: ArgumentsHost): void {
+	catch(exception: any, host: ArgumentsHost): void {
 		// In certain situations `httpAdapter` might not be available in the
 		// constructor method, thus we should resolve it here.
 		const { httpAdapter } = this.httpAdapterHost
@@ -13,6 +13,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 		const ctx = host.switchToHttp()
 
 		const httpStatus = exception instanceof HttpException ? exception.getStatus() : HttpStatus.INTERNAL_SERVER_ERROR
+		const message = exception?.message
 
 		// you can place a logger here
 		console.log('==> All Exception')
@@ -20,8 +21,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
 		const responseBody = {
 			statusCode: httpStatus,
-			timestamp: new Date().toISOString(),
-			path: httpAdapter.getRequestUrl(ctx.getRequest())
+			message: message
+			// timestamp: new Date().toISOString(),
+			// path: httpAdapter.getRequestUrl(ctx.getRequest())
 		}
 
 		httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus)

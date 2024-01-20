@@ -21,7 +21,7 @@ export class Customer {
 	@Column({ type: 'text' })
 	address: string
 
-	@Column({ type: 'varchar', length: 50, nullable: true })
+	@Column({ type: 'varchar', length: 300, nullable: true })
 	image: string
 
 	@Column({ default: 'ACTIVE', length: 20 })

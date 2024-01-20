@@ -1,4 +1,4 @@
-import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsString, Min } from 'class-validator'
+import { IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, Min } from 'class-validator'
 import { ItemStatus } from '../enums/item.enum'
 
 export class CreateItemDto {
@@ -35,5 +35,6 @@ export class CreateItemDto {
 	@IsString()
 	category_id: string
 
+	@IsOptional()
 	options?: any
 }

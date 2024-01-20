@@ -7,4 +7,6 @@ export interface FindAllItem {
 	order?: string
 	search?: string
 	category_id?: string
+	max_price?: number
+	min_price?: number
 }

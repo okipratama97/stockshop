@@ -3,7 +3,7 @@ import { CreateItemDto } from './dto/create-item.dto'
 import { UpdateItemDto } from './dto/update-item.dto'
 import { makePag, popPag } from 'src/helpers/pagination'
 import { makeSort } from 'src/helpers/sort'
-import { makeSearch } from 'src/helpers/search'
+import { makePriceLimit, makeSearch } from 'src/helpers/search'
 import { APIResponse, apiResWrapper } from 'src/helpers/api-response'
 import { ItemRepository } from './repositories/item.repository'
 import { FindAllItem } from './interfaces/item.interface'
@@ -31,8 +31,10 @@ export class ItemService {
 		try {
 			const { offset, page, limit } = makePag(query.page, query.limit)
 			const order = makeSort(query.order, query.sort)
-			const baseQuery = { id: query.id, name: query.name, category_id: query.category_id }
-			const findQuery = query.search ? makeSearch(['name'], query.search, baseQuery) : baseQuery
+			const baseQuery = { id: query.id, name: query.name, category_id: query.category_id
+			}
+			let findQuery = (query.max_price || query.min_price) ? makePriceLimit(query.max_price, query.min_price, baseQuery) : baseQuery
+			findQuery = query.search ? makeSearch(['name'], query.search, findQuery) : findQuery
 
 			const [items, count] = await this.itemRepository.findByQuery(findQuery, limit, offset, order)
 			const pagination = popPag(page, limit, '', offset, count, query.order, query.sort)

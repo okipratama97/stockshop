@@ -19,6 +19,7 @@ import { CustomerController } from './customer/customer.controller'
 import { report } from './middlewares/report.middleware'
 import { CacheInterceptor } from './interceptors/cache.interceptor'
 import { TimeoutInterceptor } from './interceptors/timeout.interceptor'
+import { AuthModule } from './auth/auth.module';
 
 @Module({
 	imports: [
@@ -41,7 +42,8 @@ import { TimeoutInterceptor } from './interceptors/timeout.interceptor'
 		CategoryModule,
 		ItemModule,
 		CartModule,
-		CustomerModule
+		CustomerModule,
+		AuthModule
 	],
 	controllers: [AppController],
 	providers: [

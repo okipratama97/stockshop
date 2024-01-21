@@ -7,5 +7,6 @@
 	"arrowParens": "avoid",
 	"semi": false,
 	"useTabs": true,
-	"endOfLine": "auto"
+	"endOfLine": "auto",
+	"tabWidth": 4
 }

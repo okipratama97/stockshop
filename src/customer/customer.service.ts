@@ -4,6 +4,7 @@ import { UpdateCustomerDto } from './dto/update-customer.dto'
 import { makeResError } from 'src/helpers/error'
 import { CustomerRepository } from './repositories/customer.repository'
 import { APIResponse, apiResWrapper } from 'src/helpers/api-response'
+import { hashPassword } from 'src/helpers/bcrypt'
 
 @Injectable()
 export class CustomerService {
@@ -11,7 +12,8 @@ export class CustomerService {
 
 	async create(createCustomerDto: CreateCustomerDto) {
 		try {
-			await this.customerRepository.insert(createCustomerDto)
+			const hashedPassword = await hashPassword(createCustomerDto.password)
+			await this.customerRepository.insert({ ...createCustomerDto, password: hashedPassword })
 
 			return apiResWrapper(HttpStatus.OK, 'Successfully created new customer')
 		} catch (error) {
